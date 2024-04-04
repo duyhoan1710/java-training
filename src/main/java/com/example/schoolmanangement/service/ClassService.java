@@ -1,7 +1,6 @@
 package com.example.schoolmanangement.service;
 
 import com.example.schoolmanangement.dto.response.ClassResponse;
-import com.example.schoolmanangement.entity.Clazz;
 import com.example.schoolmanangement.repository.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,6 +1,5 @@
 package com.example.schoolmanangement.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -23,7 +22,7 @@ import java.util.List;
 @Table(
         name = "class",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"name"})})
-public class Clazz {
+public class Class {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

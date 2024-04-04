@@ -36,5 +36,5 @@ public class Student {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
-    private Clazz clazz;
+    private Class aClass;
 }

@@ -1,6 +1,6 @@
 package com.example.schoolmanangement.dto.response;
 
-import com.example.schoolmanangement.entity.Clazz;
+import com.example.schoolmanangement.entity.Class;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,16 +15,15 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class ClassResponse {
-
     private Long id;
     private String name;
     private List<StudentResponse> students;
 
-    public static ClassResponse from(Clazz clazz){
+    public static ClassResponse from(Class aClass){
         return ClassResponse.builder()
-                .id(clazz.getId())
-                .name(clazz.getName())
-                .students(clazz.getStudents().stream().map(StudentResponse::from).toList())
+                .id(aClass.getId())
+                .name(aClass.getName())
+                .students(aClass.getStudents().stream().map(StudentResponse::from).toList())
                 .build();
     }
 }
