@@ -1,4 +1,4 @@
-package com.example.schoolmanangement.dto.response;
+package com.example.schoolmanangement.dto.response.test;
 
 
 import java.util.List;

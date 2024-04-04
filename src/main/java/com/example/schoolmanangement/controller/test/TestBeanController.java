@@ -1,14 +1,14 @@
-package com.example.schoolmanangement.controller;
+package com.example.schoolmanangement.controller.test;
 
 
-import com.example.schoolmanangement.dto.response.Person;
+import com.example.schoolmanangement.dto.response.test.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TestController {
+public class TestBeanController {
 
     @Qualifier("person")
     @Autowired

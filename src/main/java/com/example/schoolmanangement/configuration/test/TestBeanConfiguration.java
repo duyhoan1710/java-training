@@ -1,13 +1,13 @@
-package com.example.schoolmanangement.configuration;
+package com.example.schoolmanangement.configuration.test;
 
 
-import com.example.schoolmanangement.dto.response.Person;
+import com.example.schoolmanangement.dto.response.test.Person;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AppConfiguration {
+public class TestBeanConfiguration {
 
     @Bean("person01")
     public Person getDefaultPerson() {
