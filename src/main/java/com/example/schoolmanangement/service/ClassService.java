@@ -5,6 +5,7 @@ import com.example.schoolmanangement.entity.Clazz;
 import com.example.schoolmanangement.repository.ClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class ClassService {
     @Autowired
     private ClassRepository classRepository;
 
+    @Transactional
     public List<ClassResponse> getAll(){
         return classRepository.findAll().stream().map(ClassResponse::from).toList();
     }
