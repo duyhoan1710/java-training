@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.repository;
 
+
 import com.example.schoolmanangement.entity.Student;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

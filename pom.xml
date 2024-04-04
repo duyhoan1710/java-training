@@ -74,6 +74,11 @@
                                 <spaces>true</spaces>
                                 <spacesPerTab>4</spacesPerTab>
                             </indent>
+                            <replaceRegex>
+                                <name>Remove wildcard imports</name>
+                                <searchRegex>import\s+[^\*\s]+\*;(\r\n|\r|\n)</searchRegex>
+                                <replacement>$1</replacement>
+                            </replaceRegex>
                         </format>
                     </formats>
                     <java>
@@ -83,6 +88,8 @@
                             <style>AOSP</style>
                             <reflowLongStrings>true</reflowLongStrings>
                         </googleJavaFormat>
+                        <importOrder /> <!-- standard import order -->
+
                     </java>
                 </configuration>
                 <executions>

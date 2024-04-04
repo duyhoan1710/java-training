@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.configuration;
 
+
 import com.example.schoolmanangement.dto.response.Person;
 import java.util.List;
 import org.springframework.context.annotation.Bean;

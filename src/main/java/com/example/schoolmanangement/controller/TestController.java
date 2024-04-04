@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.controller;
 
+
 import com.example.schoolmanangement.dto.response.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

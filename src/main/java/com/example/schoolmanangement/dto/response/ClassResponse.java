@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.dto.response;
 
+
 import com.example.schoolmanangement.entity.Class;
 import java.util.List;
 import lombok.AllArgsConstructor;

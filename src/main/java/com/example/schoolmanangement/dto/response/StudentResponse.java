@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.dto.response;
 
+
 import com.example.schoolmanangement.entity.Student;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.controller;
 
+
 import com.example.schoolmanangement.entity.Student;
 import com.example.schoolmanangement.repository.StudentRepository;
 import java.util.List;

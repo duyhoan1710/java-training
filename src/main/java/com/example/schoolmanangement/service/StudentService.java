@@ -1,5 +1,6 @@
 package com.example.schoolmanangement.service;
 
+
 import com.example.schoolmanangement.repository.StudentRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
