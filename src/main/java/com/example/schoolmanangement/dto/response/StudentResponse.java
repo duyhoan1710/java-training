@@ -18,7 +18,7 @@ public class StudentResponse {
     private int age;
     private boolean isMale;
 
-    public static StudentResponse from(final Student student){
+    public static StudentResponse from(final Student student) {
         return StudentResponse.builder()
                 .id(student.getId())
                 .name(student.getName())

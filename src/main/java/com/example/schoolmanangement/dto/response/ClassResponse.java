@@ -1,13 +1,13 @@
 package com.example.schoolmanangement.dto.response;
 
 import com.example.schoolmanangement.entity.Class;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class ClassResponse {
     private String name;
     private List<StudentResponse> students;
 
-    public static ClassResponse from(Class aClass){
+    public static ClassResponse from(@NonNull final Class aClass) {
         return ClassResponse.builder()
                 .id(aClass.getId())
                 .name(aClass.getName())

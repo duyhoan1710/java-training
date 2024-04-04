@@ -1,11 +1,9 @@
 package com.example.schoolmanangement.dto.response;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -14,7 +12,7 @@ public class Person {
     private String name;
     private List<String> address;
 
-    public Person(){
+    public Person() {
         this.name = "David";
         this.address = List.of("Phu Yen");
     }
