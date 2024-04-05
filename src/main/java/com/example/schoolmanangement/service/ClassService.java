@@ -18,7 +18,17 @@ public class ClassService {
         return classRepository.findAll().stream().map(ClassResponse::from).toList();
     }
 
-    public List<ClassResponse> getClasses() {
-        return classRepository.findClasses().stream().map(ClassResponse::from).toList();
+    @Transactional
+    public List<ClassResponse> findAllWithAtLeastThreeStudents() {
+        return classRepository.findAllWithAtLeastThreeStudents().stream()
+                .map(ClassResponse::from)
+                .toList();
+    }
+
+    @Transactional
+    public List<ClassResponse> findAllWithAtLeastNumberOfStudents(int minNumber) {
+        return classRepository.findAllWithAtLeastNumberOfStudents(minNumber).stream()
+                .map(ClassResponse::from)
+                .toList();
     }
 }

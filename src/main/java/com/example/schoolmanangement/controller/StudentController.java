@@ -1,25 +1,28 @@
 package com.example.schoolmanangement.controller;
 
 
-import com.example.schoolmanangement.entity.Student;
-import com.example.schoolmanangement.repository.StudentRepository;
+import com.example.schoolmanangement.dto.request.common.PageReq;
+import com.example.schoolmanangement.dto.response.StudentResponse;
+import com.example.schoolmanangement.service.StudentService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class StudentController {
 
-    @Autowired private StudentRepository studentRepository;
+    @Autowired private StudentService studentService;
 
     @GetMapping("v1/students")
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public Page<StudentResponse> getStudents(@RequestBody PageReq pageReq) {
+        return studentService.getStudents(pageReq).map(StudentResponse::from);
     }
 
     @GetMapping("v1/classids")
     public List<Long> getClassIds() {
-        return studentRepository.findClassIds();
+        return studentService.getAllClassIds();
     }
 }
