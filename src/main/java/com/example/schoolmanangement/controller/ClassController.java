@@ -4,7 +4,6 @@ package com.example.schoolmanangement.controller;
 import com.example.schoolmanangement.dto.response.ClassResponse;
 import com.example.schoolmanangement.service.ClassService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,8 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/class")
 public class ClassController {
+    private final ClassService classService;
 
-    @Autowired private ClassService classService;
+    ClassController (ClassService classService) {
+        this.classService = classService;
+    }
 
     @GetMapping("/get-all")
     public List<ClassResponse> getClasses() {

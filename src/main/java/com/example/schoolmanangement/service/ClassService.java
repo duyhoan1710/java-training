@@ -1,6 +1,7 @@
 package com.example.schoolmanangement.service;
 
 
+import com.example.schoolmanangement.common.exception.ErrorException;
 import com.example.schoolmanangement.dto.response.ClassResponse;
 import com.example.schoolmanangement.repository.ClassRepository;
 import java.util.List;
@@ -10,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClassService {
-
     @Autowired private ClassRepository classRepository;
 
     @Transactional
