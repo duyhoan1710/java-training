@@ -1,10 +1,16 @@
 package com.example.javatraining.dto.request.common;
 
 
-import lombok.Value;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-@Value
+@Getter
+@AllArgsConstructor
 public class PageReq {
-    private final int page;
-    private final int limit;
+    @NotEmpty
+    int page;
+
+    @NotEmpty
+    int limit;
 }

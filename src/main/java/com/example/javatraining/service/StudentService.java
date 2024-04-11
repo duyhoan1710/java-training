@@ -47,6 +47,6 @@ public class StudentService {
             return new ResponseData<>(StudentResponse.from(student.get()));
         }
 
-        throw new ErrorException(ErrorCode.STUDENT_NOT_FOUND);
+        throw new ErrorException(ErrorCode.USER_NOT_FOUND);
     }
 }
