@@ -15,8 +15,8 @@ public class UserController {
     UserService userService;
 
     @GetMapping("users")
-    ResponsePagination <UserResponse> listUsers (@RequestParam ListUserQueryDto query) {
-       return this.userService.listUsers(query);
+    ResponsePagination <UserResponse> listUsers (@RequestParam(required = true) int page, @RequestParam(required = true) int limit, @RequestParam(required = false) String fullName) {
+       return this.userService.listUsers(new ListUserQueryDto(page, limit, fullName));
     }
 
     @PutMapping("users/{userId}")

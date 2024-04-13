@@ -3,10 +3,12 @@ package com.example.javatraining.dto.request.common;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class PageReq {
     @NotEmpty
     int page;

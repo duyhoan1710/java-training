@@ -15,8 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @AllArgsConstructor
 @Service
 public class UserServiceImpl implements UserService {
@@ -25,7 +23,7 @@ public class UserServiceImpl implements UserService {
     public ResponsePagination<UserResponse> listUsers (ListUserQueryDto query) {
         final Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
-        Page<User> users = this.userRepository.findByFullNameLike(query.getFullName(), pageable);
+        Page<User> users = this.userRepository.findAllByFullNameLike(query.getFullName(), pageable);
 
         return new ResponsePagination<>(
                 query.getPage(),
@@ -46,5 +44,4 @@ public class UserServiceImpl implements UserService {
 
         this.userRepository.save(user);
     }
-
 }

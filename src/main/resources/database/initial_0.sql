@@ -25,7 +25,17 @@ CREATE TABLE teacher (
                          is_male boolean
 );
 
+drop table if exists users;
+CREATE TABLE users (
+                         id int primary key auto_increment,
+                         full_name varchar(255),
+                         email varchar(255) unique,
+                         password varchar(255),
+                         created_at DATE,
+                         updated_at DATE
+);
+
 -- alter table student drop constraint student_class_fk_1;
-alter table student add constraint student_class_fk_1 FOREIGN KEY (class_id) REFERENCES class(id)
+alter table student add constraint student_class_fk_1 FOREIGN KEY (class_id) REFERENCES class(id);
 
 
