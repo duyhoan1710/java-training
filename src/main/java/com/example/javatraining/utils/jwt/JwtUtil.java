@@ -100,7 +100,7 @@ public class JwtUtil {
         Map<String, String> claims = new HashMap<>();
 
         claims.put("email", user.getEmail());
-        claims.put("role", user.getRole());
+        claims.put("role", user.getRole().toString());
 
         return Jwts.builder()
                 .setHeader(RS256_TOKEN_HEADER)

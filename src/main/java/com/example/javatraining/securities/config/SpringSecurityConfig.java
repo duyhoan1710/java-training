@@ -63,7 +63,7 @@ public class SpringSecurityConfig {
                                 .requestMatchers(WHITE_LIST_URL)
                                 .permitAll()
                                 .anyRequest()
-                                .permitAll()
+                                .authenticated()
         );
 
         httpSecurity.authenticationProvider(authenticationProvider());

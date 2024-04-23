@@ -1,6 +1,5 @@
 package com.example.javatraining.repositories;
 
-
 import com.example.javatraining.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +16,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByEmail(String email);
 
-    User save(User user);
+    Optional<User> findByEmailOrPhone(String email, String phone);
 }

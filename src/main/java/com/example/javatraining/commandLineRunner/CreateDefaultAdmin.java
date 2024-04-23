@@ -30,7 +30,7 @@ public class CreateDefaultAdmin implements CommandLineRunner {
             newAdmin.setPhone(this.env.getProperty("default-admin.phone"));
             newAdmin.setName(this.env.getProperty("default-admin.name"));
             newAdmin.setPassword(passwordEncoder.encode(this.env.getProperty("default-admin.password")));
-            newAdmin.setRole(RoleEnum.ADMIN.name());
+            newAdmin.setRole(RoleEnum.ADMIN);
 
             userRepository.save(newAdmin);
         }

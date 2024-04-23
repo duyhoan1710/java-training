@@ -1,9 +1,6 @@
 package com.example.javatraining.entities;
 
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +8,7 @@ import lombok.Setter;
 
 import java.util.List;
 
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,11 +16,11 @@ import java.util.List;
 @Table(name = "products")
 public class Product extends BaseEntity {
     private String name;
-    private Double price;
+    private double price;
 
-    @OneToOne(mappedBy = "products", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "product", fetch = FetchType.LAZY)
     private Inventory inventory;
 
-    @OneToMany(mappedBy = "products", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<LineOrder> lineOrders;
 }

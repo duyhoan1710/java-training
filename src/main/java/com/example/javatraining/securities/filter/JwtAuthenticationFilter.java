@@ -76,8 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @NonNull
     private Authentication getAuthenticationByJwt(
-            @NonNull final String jwtToken, @NonNull final PublicKey publicKey
-    ) {
+            @NonNull final String jwtToken, @NonNull final PublicKey publicKey) {
         final Claims claims = JwtUtil.extractAllClaims(jwtToken, publicKey);
         final JwtUserPayload jwtUserPayload = JwtUserPayload.from(claims);
         final String email = jwtUserPayload.getEmail();

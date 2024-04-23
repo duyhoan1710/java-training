@@ -4,7 +4,7 @@ drop table if exists users;
 CREATE TABLE users (
      id int primary key auto_increment,
      name varchar(255),
-     phone varchar(10),
+     phone varchar(10) unique,
      email varchar(255) unique,
      password varchar(255),
      role varchar(10),
@@ -16,7 +16,7 @@ drop table if exists customers;
 CREATE TABLE customers (
     id int primary key auto_increment,
     name varchar(255),
-    phone varchar(10),
+    phone varchar(10) unique,
     address varchar(255),
     created_at DATE,
     updated_at DATE

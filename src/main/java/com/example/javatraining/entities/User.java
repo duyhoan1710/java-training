@@ -1,6 +1,9 @@
 package com.example.javatraining.entities;
 
+import com.example.javatraining.enums.RoleEnum;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,11 +27,12 @@ public class User extends BaseEntity implements UserDetails {
     String phone;
     String name;
     String password;
-    String role;
+    @Enumerated(EnumType.STRING)
+    RoleEnum role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role));
+        return List.of(new SimpleGrantedAuthority(role.toString()));
     }
 
     @Override

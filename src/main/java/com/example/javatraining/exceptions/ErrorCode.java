@@ -11,12 +11,15 @@ public enum ErrorCode {
     VALIDATION_ERROR(-1, HttpStatus.BAD_REQUEST, "Validate data error"),
 
     INTERNAL_SERVER_ERROR(0, HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error."),
+
     DUPLICATE_USER(1, HttpStatus.BAD_REQUEST, "This user already exists."),
     USER_NOT_FOUND(2, HttpStatus.NOT_FOUND, "User not found"),
-    PASSWORD_INCORRECT(3, HttpStatus.BAD_REQUEST, "Password incorrect"),
 
+    PASSWORD_INCORRECT(3, HttpStatus.BAD_REQUEST, "Password incorrect"),
     AUTHENTICATION_NOT_FOUND(4, HttpStatus.UNAUTHORIZED, "Authentication token not found"),
-    AUTHENTICATION_ERROR(5, HttpStatus.UNAUTHORIZED, "Authentication error");
+    AUTHENTICATION_ERROR(5, HttpStatus.UNAUTHORIZED, "Authentication error"),
+
+    DUPLICATE_PRODUCT(6, HttpStatus.BAD_REQUEST, "This product already exists.");
 
     private final int errorCode;
     private final HttpStatus statusCode;
