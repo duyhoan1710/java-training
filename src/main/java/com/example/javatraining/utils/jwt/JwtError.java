@@ -1,10 +1,11 @@
-package com.example.javatraining.utils.jwt.error;
+package com.example.javatraining.utils.jwt;
 
 
+import com.example.javatraining.exceptions.ErrorCode;
 import org.springframework.security.core.AuthenticationException;
 
-public class InvalidJwtError extends AuthenticationException {
-    public InvalidJwtError() {
-        super("Invalid jwt error");
+public class JwtError extends AuthenticationException {
+    public JwtError(ErrorCode errorCode) {
+        super(errorCode.getMessage());
     }
 }

@@ -1,2 +1,3 @@
-package com.example.javatraining.dtos.auth.response;public class RegisterResponse {
-}
+package com.example.javatraining.dtos.auth.response;
+
+public class RegisterResponse {}

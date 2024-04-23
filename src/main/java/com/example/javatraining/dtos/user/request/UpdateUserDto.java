@@ -1,9 +1,15 @@
 package com.example.javatraining.dtos.user.request;
 
 
-import lombok.Value;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Value
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class UpdateUserDto {
-    String fullName;
+    @NotEmpty
+    String name;
 }

@@ -1,12 +1,12 @@
-package com.example.javatraining.configurations.test;
+package com.example.javatraining.configurations;
 
+
+import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-
-import javax.sql.DataSource;
 
 @Configuration
 public class FlywayConfig {
@@ -16,22 +16,21 @@ public class FlywayConfig {
     @Value("${spring.datasource.url}")
     private String dataSourceUrl;
 
-
     @Value("${spring.datasource.username}")
     private String dataSourceUsername;
-
 
     @Value("${spring.datasource.password}")
     private String dataSourcePassword;
 
     @Bean
     public Flyway flyway() {
-        Flyway flyway = Flyway.configure()
-                .dataSource(dataSource())
-                .locations(flywayLocations)
-                .baselineOnMigrate(true)
-                .baselineVersion("0")
-                .load();
+        Flyway flyway =
+                Flyway.configure()
+                        .dataSource(dataSource())
+                        .locations(flywayLocations)
+                        .baselineOnMigrate(true)
+                        .baselineVersion("0")
+                        .load();
         flyway.migrate();
         return flyway;
     }
@@ -46,4 +45,3 @@ public class FlywayConfig {
         return dataSource;
     }
 }
-

@@ -1,4 +1,4 @@
-package com.example.schoolmanangement.util.jwt;
+package com.example.javatraining.utils.jwt;
 
 
 import lombok.Getter;

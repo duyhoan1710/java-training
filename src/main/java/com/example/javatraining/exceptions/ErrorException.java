@@ -34,13 +34,4 @@ public class ErrorException extends RuntimeException {
         this.message = "Unexpected error";
         this.debugMessage = ex.getLocalizedMessage();
     }
-
-    public ErrorException(
-            int errorCode, HttpStatus statusCode, String message, String debugMessage) {
-        this();
-        this.errorCode = errorCode;
-        this.statusCode = statusCode;
-        this.message = message;
-        this.debugMessage = debugMessage;
-    }
 }

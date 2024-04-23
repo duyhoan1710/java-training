@@ -1,8 +1,10 @@
 package com.example.javatraining.securities.filter;
 
+import com.example.javatraining.exceptions.ErrorCode;
+import com.example.javatraining.repositories.UserRepository;
+import com.example.javatraining.utils.jwt.JwtError;
 import com.example.javatraining.utils.jwt.JwtUserPayload;
 import com.example.javatraining.utils.jwt.JwtUtil;
-import com.example.javatraining.utils.jwt.error.InvalidJwtError;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -13,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
-import org.springframework.lang.Nullable;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -26,27 +27,35 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.security.PublicKey;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.example.javatraining.securities.config.SpringSecurityConfig.WHITE_LIST_URL;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
-
-    private final AuthenticationEntryPoint authenticationEntryPoint;
     private final PublicKey publicKey;
+    private final UserRepository userRepository;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(
             final HttpServletRequest request,
             final HttpServletResponse response,
-            final FilterChain filterChain)
-            throws ServletException, IOException {
-
+            final FilterChain filterChain
+    ) throws ServletException, IOException {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!this.isBearerToken(authHeader)) {
+
+        if (this.isPublicRoute(request)) {
             filterChain.doFilter(request, response);
+            return;
+        }
+
+        if (authHeader == null || !isBearerToken(authHeader)) {
+            this.authenticationEntryPoint.commence(request, response, new JwtError(ErrorCode.AUTHENTICATION_NOT_FOUND));
             return;
         }
 
@@ -57,34 +66,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authentication = this.getAuthenticationByJwt(jwtToken, this.publicKey);
         } catch (AuthenticationException error) {
             SecurityContextHolder.clearContext();
-            this.authenticationEntryPoint.commence(request, response, new InvalidJwtError());
+            this.authenticationEntryPoint.commence(request, response, new JwtError(ErrorCode.AUTHENTICATION_ERROR));
             return;
         }
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 
     @NonNull
     private Authentication getAuthenticationByJwt(
-            @NonNull final String jwtToken, @NonNull final PublicKey publicKey) {
+            @NonNull final String jwtToken, @NonNull final PublicKey publicKey
+    ) {
         final Claims claims = JwtUtil.extractAllClaims(jwtToken, publicKey);
         final JwtUserPayload jwtUserPayload = JwtUserPayload.from(claims);
-        final String username = jwtUserPayload.getUsername();
+        final String email = jwtUserPayload.getEmail();
         final String role = jwtUserPayload.getRole();
-        final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
-        return new UsernamePasswordAuthenticationToken(username, null, authorities);
+        final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
+        return new UsernamePasswordAuthenticationToken(email, null, authorities);
     }
 
-    private boolean isBearerToken(@Nullable final String authHeader) {
+    private boolean isPublicRoute(final HttpServletRequest request) {
+        String requestUrl = request.getRequestURI();
+
+        String result = Arrays.stream(WHITE_LIST_URL).filter(url -> requestUrl.startsWith(url.replace("**", ""))).findFirst().orElse(null);
+
+        return result != null;
+    }
+
+    private boolean isBearerToken(final String authHeader) {
         return StringUtils.isNotEmpty(authHeader)
                 && StringUtils.startsWithIgnoreCase(authHeader, BEARER_PREFIX);
     }
 
-    @NonNull
-    private String extractJwtFromAuthorizationHeader(@NonNull final String authorizationHeader) {
-        if (authorizationHeader.startsWith(BEARER_PREFIX)) {
-            return authorizationHeader.substring(BEARER_PREFIX.length()).trim();
-        }
-        throw new InvalidJwtError();
+    private String extractJwtFromAuthorizationHeader(final String authorizationHeader) {
+        return authorizationHeader.substring(BEARER_PREFIX.length()).trim();
     }
 }

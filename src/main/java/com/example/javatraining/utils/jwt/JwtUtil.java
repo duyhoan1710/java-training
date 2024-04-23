@@ -1,35 +1,22 @@
-package com.example.schoolmanangement.util.jwt;
+package com.example.javatraining.utils.jwt;
 
 
-import com.example.schoolmanangement.util.jwt.error.InvalidJwtError;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwsHeader;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SigningKeyResolverAdapter;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.DecodingException;
-import io.jsonwebtoken.security.SignatureException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
-import java.time.ZonedDateTime;
-import java.util.Base64;
-import java.util.Date;
-import java.util.Map;
+import com.example.javatraining.entities.User;
+import com.example.javatraining.exceptions.ErrorCode;
+import io.jsonwebtoken.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @Slf4j
@@ -38,6 +25,7 @@ public class JwtUtil {
             Map.ofEntries(Map.entry("typ", "JWT"), Map.entry("alg", "RS256"));
     private static final String BEARER_PREFIX = "Bearer ";
     private static final String RSA_ALGORITHM = "RSA";
+    private static final long JWT_EXPIRATION = 604800000L;
 
     @NonNull
     public static final PublicKey extractRsaPublicKey(@NonNull final String publicKey)
@@ -76,23 +64,13 @@ public class JwtUtil {
                                     })
                             .build();
         } catch (JwtException | UnsupportedOperationException | IllegalArgumentException e) {
-            log.info("Jwt error happened", e);
-            throw new InvalidJwtError();
+            throw new JwtError(ErrorCode.AUTHENTICATION_ERROR);
         }
 
         try {
             return jwtParser.parseClaimsJws(jwt).getBody();
-        } catch (ExpiredJwtException
-                | UnsupportedJwtException
-                | MalformedJwtException
-                | SignatureException
-                | IllegalArgumentException
-                | DecodingException e) {
-            log.info("Jwt error happened", e);
-            throw new InvalidJwtError();
         } catch (Exception e) {
-            log.error("This error should not be raised.", e);
-            throw new InvalidJwtError();
+            throw new JwtError(ErrorCode.AUTHENTICATION_ERROR);
         }
     }
 
@@ -114,20 +92,22 @@ public class JwtUtil {
 
     @NonNull
     public static String generateAccessToken(
-            @NonNull final Map<String, Object> header,
-            @NonNull final String issuer,
-            @NonNull final Claims claims,
-            @NonNull final String subject,
-            @NonNull final ZonedDateTime issuedAt,
-            @NonNull final ZonedDateTime expiration,
-            @NonNull final PrivateKey privateKey) {
+            @NonNull final User user,
+            @NonNull final PrivateKey privateKey
+    ) {
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
+        Map<String, String> claims = new HashMap<>();
+
+        claims.put("email", user.getEmail());
+        claims.put("role", user.getRole());
+
         return Jwts.builder()
-                .setHeader(header)
+                .setHeader(RS256_TOKEN_HEADER)
                 .setClaims(claims)
-                .setSubject(subject)
-                .setIssuer(issuer)
-                .setIssuedAt(Date.from(issuedAt.toInstant()))
-                .setExpiration(Date.from(expiration.toInstant()))
+                .setSubject(user.getEmail())
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
                 .signWith(privateKey, SignatureAlgorithm.RS256)
                 .compact();
     }

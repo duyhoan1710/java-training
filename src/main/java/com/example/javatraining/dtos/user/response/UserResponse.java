@@ -11,13 +11,13 @@ import lombok.*;
 @Builder
 public class UserResponse {
     private Long id;
-    private String fullName;
+    private String name;
     private String email;
 
     public static UserResponse from(final User user) {
         return UserResponse.builder()
                 .id(user.getId())
-                .fullName(user.getFullName())
+                .name(user.getName())
                 .email(user.getEmail())
                 .build();
     }

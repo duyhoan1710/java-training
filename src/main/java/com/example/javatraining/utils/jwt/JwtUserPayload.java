@@ -1,4 +1,4 @@
-package com.example.schoolmanangement.util.jwt;
+package com.example.javatraining.utils.jwt;
 
 
 import io.jsonwebtoken.Claims;
@@ -8,7 +8,7 @@ import lombok.NonNull;
 
 @Getter
 public class JwtUserPayload extends JwtPayload {
-    private final String username;
+    private final String email;
     private final String role;
 
     @Builder
@@ -17,10 +17,10 @@ public class JwtUserPayload extends JwtPayload {
             final String sub,
             final long iat,
             final long exp,
-            final String username,
+            final String email,
             final String role) {
         super(iss, sub, iat, exp);
-        this.username = username;
+        this.email = email;
         this.role = role;
     }
 
@@ -31,7 +31,7 @@ public class JwtUserPayload extends JwtPayload {
                 .exp(claims.getExpiration().getTime())
                 .iat(claims.getIssuedAt().getTime())
                 .sub(claims.getSubject())
-                .username(claims.get("username", String.class))
+                .email(claims.get("email", String.class))
                 .role(claims.get("role", String.class))
                 .build();
     }

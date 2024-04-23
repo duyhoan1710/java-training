@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Getter
 public class ListUserQueryDto extends PageReq {
     @NotEmpty
-    String fullName;
+    String name;
 
-    public ListUserQueryDto(int page, int limit, String fullName) {
+    public ListUserQueryDto(int page, int limit, String name) {
         super(page, limit);
-        this.fullName = fullName;
+        this.name = name;
     }
 }

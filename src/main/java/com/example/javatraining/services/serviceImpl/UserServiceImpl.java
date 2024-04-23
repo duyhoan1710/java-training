@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     public ResponsePagination<UserResponse> listUsers(ListUserQueryDto query) {
         final Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
-        Page<User> users = this.userRepository.findAllByFullNameLike(query.getFullName(), pageable);
+        Page<User> users = this.userRepository.findByNameLike(query.getName(), pageable);
 
         return new ResponsePagination<>(
                 query.getPage(),
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
             throw new ErrorException(ErrorCode.USER_NOT_FOUND);
         }
 
-        user.setFullName(payload.getFullName());
+        user.setName(payload.getName());
 
         this.userRepository.save(user);
     }
