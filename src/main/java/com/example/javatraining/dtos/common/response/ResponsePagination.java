@@ -1,9 +1,8 @@
 package com.example.javatraining.dtos.common.response;
 
 
-import lombok.Value;
-
 import java.util.List;
+import lombok.Value;
 
 @Value
 public class ResponsePagination<T> {

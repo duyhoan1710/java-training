@@ -3,7 +3,7 @@ services:
   db:
     image: mysql:8.0
     environment:
-      - MYSQL_DATABASE=school_management
+      - MYSQL_DATABASE=java_training
       - MYSQL_ROOT_PASSWORD=123456
       - MYSQL_USER=admin
       - MYSQL_PASSWORD=123456
@@ -13,14 +13,14 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - db:/var/lib/mysql
+      - db1:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
-  redis:
-    image: redis:latest
-    restart: always
-    ports:
-      - "6379:6379"
+#  redis:
+#    image: redis:latest
+#    restart: always
+#    ports:
+#      - "6379:6379"
 
 volumes:
-  db:
+  db1:
     driver: local
