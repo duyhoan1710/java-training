@@ -10,14 +10,17 @@ import com.example.javatraining.dtos.user.response.UserResponse;
 import com.example.javatraining.services.UserService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
-import lombok.Value;
+import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
 @SecurityRequirement(name = "bearerAuth")
-@Value
+@AllArgsConstructor
 public class UserController {
-    UserService userService;
+    private final UserService userService;
 
     @GetMapping("users")
     ResponsePagination<UserResponse> listUsers(
@@ -29,6 +32,8 @@ public class UserController {
 
     @PostMapping("users")
     void createUser(@RequestBody CreateUserDto payload) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
         this.userService.createUser(payload);
     }
 
@@ -37,6 +42,7 @@ public class UserController {
         this.userService.updateUser(userId, payload);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("users/{userId}/reset-password")
     void resetPassword(@PathVariable long userId, @RequestBody @Valid ResetPasswordDto payload) {
         this.userService.resetPassword(userId, payload);

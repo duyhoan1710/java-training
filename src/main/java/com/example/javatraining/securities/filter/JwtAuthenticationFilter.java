@@ -82,7 +82,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String email = jwtUserPayload.getEmail();
         final String role = jwtUserPayload.getRole();
         final List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority("ROLE_" + role));
-        return new UsernamePasswordAuthenticationToken(email, null, authorities);
+        return new UsernamePasswordAuthenticationToken(email, jwtUserPayload, authorities);
     }
 
     private boolean isPublicRoute(final HttpServletRequest request) {

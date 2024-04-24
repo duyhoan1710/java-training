@@ -7,6 +7,8 @@ import com.example.javatraining.dtos.customer.response.CustomerResponse;
 import com.example.javatraining.services.CustomerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @Value
@@ -28,6 +30,8 @@ public class CustomerController {
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String address
     ) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         return customerService.getCustomers(new ListCustomerQueryDto(page, limit, phone, name, address));
     }
 

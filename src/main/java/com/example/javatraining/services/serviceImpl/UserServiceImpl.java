@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public ResponsePagination<UserResponse> listUsers(ListUserQueryDto query) {
         final Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
-        Page<User> users = this.userRepository.findByNameLike(query.getName(), pageable);
+        Page<User> users = userRepository.findByNameLike(query.getName(), pageable);
 
         return new ResponsePagination<>(
                 query.getPage(),

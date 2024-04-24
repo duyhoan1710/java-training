@@ -99,6 +99,7 @@ public class JwtUtil {
         Date expiryDate = new Date(now.getTime() + JWT_EXPIRATION);
         Map<String, String> claims = new HashMap<>();
 
+        claims.put("id", String.valueOf(user.getId()));
         claims.put("email", user.getEmail());
         claims.put("role", user.getRole().toString());
 

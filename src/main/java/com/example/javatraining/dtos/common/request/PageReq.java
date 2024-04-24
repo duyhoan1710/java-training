@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PageReq {
-    @NotEmpty int page;
+    @NotEmpty
+    int page;
 
-    @NotEmpty int limit;
+    @NotEmpty
+    int limit;
 }

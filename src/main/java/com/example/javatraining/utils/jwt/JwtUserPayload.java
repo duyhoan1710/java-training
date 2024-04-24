@@ -10,6 +10,7 @@ import lombok.NonNull;
 public class JwtUserPayload extends JwtPayload {
     private final String email;
     private final String role;
+    private final long id;
 
     @Builder
     public JwtUserPayload(
@@ -18,10 +19,13 @@ public class JwtUserPayload extends JwtPayload {
             final long iat,
             final long exp,
             final String email,
-            final String role) {
+            final String role,
+            final long id
+    ) {
         super(iss, sub, iat, exp);
         this.email = email;
         this.role = role;
+        this.id = id;
     }
 
     @NonNull
@@ -33,6 +37,7 @@ public class JwtUserPayload extends JwtPayload {
                 .sub(claims.getSubject())
                 .email(claims.get("email", String.class))
                 .role(claims.get("role", String.class))
+                .id(Long.parseLong(claims.get("id", String.class)))
                 .build();
     }
 }

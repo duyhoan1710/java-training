@@ -19,7 +19,13 @@ public enum ErrorCode {
     AUTHENTICATION_NOT_FOUND(4, HttpStatus.UNAUTHORIZED, "Authentication token not found"),
     AUTHENTICATION_ERROR(5, HttpStatus.UNAUTHORIZED, "Authentication error"),
 
-    DUPLICATE_PRODUCT(6, HttpStatus.BAD_REQUEST, "This product already exists.");
+    DUPLICATE_PRODUCT(6, HttpStatus.BAD_REQUEST, "This product already exists."),
+    PRODUCT_NOT_FOUND(7, HttpStatus.NOT_FOUND, "Product not found"),
+    DUPLICATE_PRODUCT_IN_ORDER(8, HttpStatus.BAD_REQUEST, "Duplicate product in order"),
+    QUANTITY_NOT_ENOUGH(8, HttpStatus.BAD_REQUEST, "Quantity not enough"),
+
+    CUSTOMER_NOT_FOUND(2, HttpStatus.NOT_FOUND, "Customer not found");
+
 
     private final int errorCode;
     private final HttpStatus statusCode;

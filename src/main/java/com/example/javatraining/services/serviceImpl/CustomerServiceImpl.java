@@ -54,4 +54,8 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(customerId);
     }
 
+    public Customer getCustomerById(long customerId) {
+        return this.customerRepository.findById(customerId).orElseThrow(() -> new ErrorException(ErrorCode.CUSTOMER_NOT_FOUND));
+    }
+
 }
