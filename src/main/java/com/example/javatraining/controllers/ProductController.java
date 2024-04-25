@@ -8,8 +8,10 @@ import com.example.javatraining.dtos.product.response.ProductResponse;
 import com.example.javatraining.enums.ProductSortBy;
 import com.example.javatraining.services.ProductService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,13 +20,15 @@ import org.springframework.web.bind.annotation.*;
 public class ProductController {
     private final ProductService productService;
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('OPERATOR')")
     @PostMapping("products")
     void createProduct(@RequestBody CreateProductDto payload) {
         this.productService.createProduct(payload);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("products/{productId}")
-    void updateProduct(@PathVariable long productId, @RequestBody UpdateProductDto payload) {
+    void updateProduct(@PathVariable long productId, @Valid @RequestBody UpdateProductDto payload) {
         this.productService.updateProduct(productId, payload);
     }
 
@@ -32,7 +36,7 @@ public class ProductController {
     ResponsePagination<ProductResponse> getProducts(
             @RequestParam(required = true) int page,
             @RequestParam(required = true) int limit,
-            @RequestParam(required = false) String name,
+            @RequestParam(required = false, defaultValue = "") String name,
             @RequestParam(required = false) double priceFrom,
             @RequestParam(required = false) double priceTo,
             @RequestParam(required = true) ProductSortBy sortBy,

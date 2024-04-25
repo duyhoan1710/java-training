@@ -1,6 +1,7 @@
 package com.example.javatraining.exceptions;
 
 
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -27,7 +28,7 @@ public class GlobalExceptionHandler {
                 new ErrorResponse(errorCode, statusCode, message, debugMessage, dateTime), statusCode);
     }
 
-    @ExceptionHandler(BindException.class)
+    @ExceptionHandler({BindException.class, UnexpectedTypeException.class})
     public ResponseEntity<ErrorResponse> handleBindException(BindException e) {
         ErrorCode errorCode = ErrorCode.VALIDATION_ERROR;
 

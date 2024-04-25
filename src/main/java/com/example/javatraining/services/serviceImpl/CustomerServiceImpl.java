@@ -9,16 +9,18 @@ import com.example.javatraining.exceptions.ErrorCode;
 import com.example.javatraining.exceptions.ErrorException;
 import com.example.javatraining.repositories.CustomerRepository;
 import com.example.javatraining.services.CustomerService;
-import lombok.Value;
+import com.example.javatraining.utils.Utils;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+@AllArgsConstructor
 @Service
-@Value
 public class CustomerServiceImpl implements CustomerService {
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     public void createCustomer(CreateCustomerDto payload) {
         Customer customer = this.customerRepository.findByPhone(payload.getPhone()).orElse(null);
@@ -36,10 +38,11 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(newCustomer);
     }
 
+    @Transactional(readOnly = true)
     public ResponsePagination<CustomerResponse> getCustomers(ListCustomerQueryDto query) {
         final Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
-        Page<Customer> customers = this.customerRepository.findByPhoneLikeOrNameLikeOrAddressLike(query.getPhone(), query.getName(), query.getAddress(), pageable);
+        Page<Customer> customers = this.customerRepository.findByPhoneLikeAndNameLikeAndAddressLike(Utils.convertKeywordLike(query.getPhone()), Utils.convertKeywordLike(query.getName()), Utils.convertKeywordLike(query.getAddress()), pageable);
 
         return new ResponsePagination<>(
                 query.getPage(),

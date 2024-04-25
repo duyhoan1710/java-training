@@ -14,7 +14,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findById(int customerId);
 
-    Page<Customer> findByPhoneLikeOrNameLikeOrAddressLike(String phone, String Name, String Address, Pageable pageable);
+    Page<Customer> findByPhoneLikeAndNameLikeAndAddressLike(String phone, String Name, String Address, Pageable pageable);
 
     void deleteById(int customerId);
 }

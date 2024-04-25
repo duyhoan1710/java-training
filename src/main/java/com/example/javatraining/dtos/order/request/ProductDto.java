@@ -1,5 +1,6 @@
 package com.example.javatraining.dtos.order.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,5 +12,6 @@ public class ProductDto {
     long id;
 
     @NotEmpty
+    @Min(1)
     int quantity;
 }

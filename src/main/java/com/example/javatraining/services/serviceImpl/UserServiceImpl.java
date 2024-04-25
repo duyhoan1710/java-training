@@ -5,13 +5,13 @@ import com.example.javatraining.dtos.common.response.ResponsePagination;
 import com.example.javatraining.dtos.user.request.CreateUserDto;
 import com.example.javatraining.dtos.user.request.ListUserQueryDto;
 import com.example.javatraining.dtos.user.request.ResetPasswordDto;
-import com.example.javatraining.dtos.user.request.UpdateUserDto;
 import com.example.javatraining.dtos.user.response.UserResponse;
 import com.example.javatraining.entities.User;
 import com.example.javatraining.exceptions.ErrorCode;
 import com.example.javatraining.exceptions.ErrorException;
 import com.example.javatraining.repositories.UserRepository;
 import com.example.javatraining.services.UserService;
+import com.example.javatraining.utils.Utils;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public ResponsePagination<UserResponse> listUsers(ListUserQueryDto query) {
         final Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
-        Page<User> users = userRepository.findByNameLike(query.getName(), pageable);
+        Page<User> users = userRepository.findByNameLike(Utils.convertKeywordLike(query.getName()), pageable);
 
         return new ResponsePagination<>(
                 query.getPage(),
@@ -52,14 +52,6 @@ public class UserServiceImpl implements UserService {
         newUser.setRole(payload.getRole());
 
         userRepository.save(newUser);
-    }
-
-    public void updateUser(long userId, UpdateUserDto payload) {
-        User user = this.userRepository.findById(userId).orElseThrow(() -> new ErrorException(ErrorCode.USER_NOT_FOUND));
-
-        user.setName(payload.getName());
-
-        this.userRepository.save(user);
     }
 
     public void resetPassword(long userId, ResetPasswordDto payload) {

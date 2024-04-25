@@ -12,7 +12,8 @@ spring:
     database-platform: org.hibernate.dialect.MySQLDialect
     storage_engine: innodb
     show-sql: true
-    open-in-view: false
+    open-in-view:
+      false
     hibernate:
       ddl-auto: none
   flyway:

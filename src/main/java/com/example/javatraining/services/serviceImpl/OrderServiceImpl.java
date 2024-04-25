@@ -14,11 +14,12 @@ import com.example.javatraining.repositories.OrderRepository;
 import com.example.javatraining.services.CustomerService;
 import com.example.javatraining.services.OrderService;
 import com.example.javatraining.services.ProductService;
-import lombok.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,14 +28,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@Value
+@AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    OrderRepository orderRepository;
-    LineOrderRepository lineOrderRepository;
-    InventoryRepository inventoryRepository;
+    private OrderRepository orderRepository;
+    private LineOrderRepository lineOrderRepository;
+    private InventoryRepository inventoryRepository;
 
-    ProductService productService;
-    CustomerService customerService;
+    private ProductService productService;
+    private CustomerService customerService;
 
     private Set<ProductDto> getDuplicateProduct(List<ProductDto> products) {
         return products.stream()
@@ -42,8 +43,13 @@ public class OrderServiceImpl implements OrderService {
                 .collect(Collectors.toSet());
     }
 
+    @Transactional
     public void createOrder(CreateOrderDto payload) {
         Customer customer = customerService.getCustomerById(payload.getCustomerId());
+
+        if (customer == null) {
+            throw new ErrorException(ErrorCode.CUSTOMER_NOT_FOUND);
+        }
 
         List<ProductDto> productsInput = payload.getProducts();
 
@@ -65,32 +71,40 @@ public class OrderServiceImpl implements OrderService {
 
         Order newOrder = new Order();
         newOrder.setCustomer(customer);
-        newOrder = orderRepository.save(newOrder);
+
+        double totalPrice = 0;
 
         for (ProductDto productInput : productsInput) {
             Product product = products.stream().filter(p -> p.getId() == productInput.getId()).findFirst().orElse(null);
+
+            if (product == null) {
+                continue;
+            }
 
             if (product.getInventory().getStockQuantity() < productInput.getQuantity()) {
                 throw new ErrorException(ErrorCode.QUANTITY_NOT_ENOUGH);
             }
 
+            totalPrice += product.getPrice() * productInput.getQuantity();
+
             Inventory inventory = product.getInventory();
             inventory.setStockQuantity(inventory.getStockQuantity() - productInput.getQuantity());
-
             updatedInventories.add(inventory);
 
             LineOrder lineOrder = new LineOrder();
-            lineOrder.setOrderId(newOrder.getId());
-            lineOrder.setCustomerId(customer.getId());
-            lineOrder.setProductId(product.getId());
+            lineOrder.setCustomer(customer);
+            lineOrder.setProduct(product);
+            lineOrder.setOrder(newOrder);
 
             newLineOrders.add(lineOrder);
         }
-
+        newOrder.setLineOrders(newLineOrders);
+        newOrder.setTotalMoney(totalPrice);
+        orderRepository.save(newOrder);
         inventoryRepository.saveAll(updatedInventories);
-        lineOrderRepository.saveAll(newLineOrders);
     }
 
+    @Transactional
     public ResponsePagination<OrderResponse> getOrders(ListOrderQueryDto query) {
         Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit());
 
@@ -100,6 +114,6 @@ public class OrderServiceImpl implements OrderService {
                 query.getPage(),
                 query.getLimit(),
                 orders.getTotalElements(),
-                orders.getContent().stream().map(OrderResponse::from).toList());
+                orders.getContent().stream().map(OrderResponse::withCustomerAndLineOrderFrom).toList());
     }
 }

@@ -1,6 +1,8 @@
 package com.example.javatraining.dtos.product.request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,10 +12,12 @@ public class UpdateProductDto {
     @NotEmpty
     String name;
 
-    @NotEmpty
+    @NotNull
+    @Min(1)
     int quantity;
 
-    @NotEmpty
+    @NotNull
+    @Min(0)
     double price;
 
 }

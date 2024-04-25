@@ -12,6 +12,7 @@ import com.example.javatraining.exceptions.ErrorException;
 import com.example.javatraining.repositories.InventoryRepository;
 import com.example.javatraining.repositories.ProductRepository;
 import com.example.javatraining.services.ProductService;
+import com.example.javatraining.utils.Utils;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,8 @@ import java.util.List;
 @AllArgsConstructor
 @Service
 public class ProductServiceImpl implements ProductService {
-    ProductRepository productRepository;
-    InventoryRepository inventoryRepository;
+    private ProductRepository productRepository;
+    private InventoryRepository inventoryRepository;
 
     @Transactional
     public void createProduct(CreateProductDto payload) {
@@ -64,10 +65,17 @@ public class ProductServiceImpl implements ProductService {
         inventoryRepository.save(inventory);
     }
 
+    @Transactional()
     public ResponsePagination<ProductResponse> getProducts(ListProductQueryDto query) {
-        Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit(), Sort.by(query.getSortType(), query.getSortBy().toString()));
+        Pageable pageable = PageRequest.of(query.getPage() - 1, query.getLimit(), Sort.by(query.getSortType(), String.valueOf(query.getSortBy()).toLowerCase()));
 
-        Page<Product> products = productRepository.findByNameAndPriceGreaterThanAndPriceLessThan(query.getName(), query.getPriceFrom(), query.getPriceTo(), pageable);
+        Page<Product> products = productRepository
+                .findByNameLikeAndPriceGreaterThanEqualAndPriceLessThanEqual(
+                        Utils.convertKeywordLike(query.getName()),
+                        query.getPriceFrom(),
+                        query.getPriceTo(),
+                        pageable
+                );
 
         return new ResponsePagination<>(
                 query.getPage(),
@@ -80,5 +88,4 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByIds(List<Long> ids) {
         return productRepository.findAllById(ids);
     }
-
 }

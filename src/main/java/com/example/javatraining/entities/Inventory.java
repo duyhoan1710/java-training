@@ -17,7 +17,7 @@ public class Inventory extends BaseEntity {
     @Column(name = "stock_quantity")
     private int stockQuantity;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     @JsonIgnore
     private Product product;

@@ -6,35 +6,35 @@ import com.example.javatraining.dtos.customer.request.ListCustomerQueryDto;
 import com.example.javatraining.dtos.customer.response.CustomerResponse;
 import com.example.javatraining.services.CustomerService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Value
+@AllArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 @RestController
 public class CustomerController {
-    CustomerService customerService;
+    private CustomerService customerService;
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('OPERATOR')")
     @PostMapping("customers")
     void createCustomer(CreateCustomerDto payload) {
         customerService.createCustomer(payload);
     }
 
+    @PreAuthorize("hasRole('ADMIN') OR hasRole('OPERATOR')")
     @GetMapping("customers")
     ResponsePagination<CustomerResponse> getCustomers(
             @RequestParam(required = true) int page,
             @RequestParam(required = true) int limit,
-            @RequestParam(required = false) String phone,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String address
+            @RequestParam(required = false, defaultValue = "") String phone,
+            @RequestParam(required = false, defaultValue = "") String name,
+            @RequestParam(required = false, defaultValue = "") String address
     ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         return customerService.getCustomers(new ListCustomerQueryDto(page, limit, phone, name, address));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("customers/{customerId}")
     void deleteCustomer(@PathVariable(required = true) int customerId) {
         customerService.deleteCustomer(customerId);

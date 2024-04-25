@@ -2,7 +2,6 @@ package com.example.javatraining.controllers;
 
 
 import com.example.javatraining.dtos.auth.request.LoginDto;
-import com.example.javatraining.dtos.auth.request.RegisterDto;
 import com.example.javatraining.dtos.auth.response.LoginResponse;
 import com.example.javatraining.dtos.common.response.ResponseData;
 import com.example.javatraining.services.AuthService;
@@ -20,10 +19,5 @@ public class AuthController {
     @PostMapping("auth/login")
     ResponseData<LoginResponse> login(@RequestBody @Valid LoginDto payload) {
         return this.authService.login(payload);
-    }
-
-    @PostMapping("auth/register")
-    void register(@RequestBody @Valid RegisterDto payload) {
-        this.authService.register(payload);
     }
 }
